@@ -2,7 +2,7 @@
 <html lang="zh-CN" data-page-node-id="gLmhh0EhyKzfI20vZApb65">
 <head data-page-node-id="XhgNOb7VD03kZiGGeYjW3f">
 <meta charset="UTF-8" data-page-node-id="bgD4EXqA9qNSSt3IwTJ13C">
-<meta name="viewport" content="width=device-width,initial-scale=1" data-page-node-id="S4jDOTazwsTynSQnlm0TFm">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" data-page-node-id="S4jDOTazwsTynSQnlm0TFm">
 <title>鼎和保险 · 保险学刷题器</title>
 <style>
 :root{
@@ -33,8 +33,8 @@ header{background:var(--panel);border-bottom:1px solid var(--line);position:stic
 
 /* ---------- layout ---------- */
 .wrap{max-width:1080px;margin:14px auto 0;padding:0 18px 40px;display:grid;grid-template-columns:1fr 290px;gap:16px;align-items:start}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-@media(max-width:900px){.wrap{grid-template-columns:1fr}.aside{order:-1}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;min-width:0}
+.wrap>*{min-width:0}
 
 /* ---------- filters ---------- */
 .filters{padding:12px 16px;border-bottom:1px solid var(--line2);background:#fcfcfd;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
@@ -74,6 +74,7 @@ header{background:var(--panel);border-bottom:1px solid var(--line);position:stic
 .opt.lock:hover.sel{background:var(--blue-soft);border-color:var(--blue)}
 .opt.lock:hover.right{background:var(--ok-soft);border-color:#8fd6ab}
 .opt.lock:hover.bad{background:var(--brand-soft);border-color:#f0b3ac}
+.opt.plain .k{flex:0 0 auto;min-width:36px;height:26px;font-size:13px;padding:0 10px;border-radius:8px}
 
 .shortbox{border:1px dashed var(--line);border-radius:10px;background:#fcfcfd;padding:12px 14px;font-size:14px;color:var(--muted)}
 
@@ -120,6 +121,75 @@ header{background:var(--panel);border-bottom:1px solid var(--line);position:stic
 .toast{position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(20px);background:#1f2328;color:#fff;border-radius:10px;padding:9px 18px;font-size:13.5px;opacity:0;pointer-events:none;transition:.25s;z-index:60}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 kbd{background:#f1f3f5;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;font-size:11.5px;font-family:inherit}
+/* ---------- 手机端（≤900px）：题目导航收进底部抽屉，不再占位、不遮挡题目 ---------- */
+.scrim{display:none}
+.navbtn-m{display:none}
+.navclose{display:none;margin-left:8px;border:1px solid var(--line);background:#fff;border-radius:7px;padding:3px 10px;font-size:11.5px;line-height:1.55;color:var(--muted);cursor:pointer;flex:0 0 auto;font-family:inherit}
+.navclose:hover{color:var(--text);border-color:#b9c0c9}
+body.sheet-open{overflow:hidden}
+@media(max-width:900px){
+  .hbar{padding:8px 12px;gap:7px}
+  .brand{font-size:15px}
+  .brand small{display:none}
+  .hspace{display:none}
+  .kpis{width:100%;gap:6px}
+  .kpi{flex:1 1 0;min-width:0;padding:4px 4px;font-size:11px;border-radius:8px}
+  .kpi b{font-size:15px}
+  .pwrap{padding:0 12px 6px;font-size:11.5px;gap:4px;flex-wrap:wrap}
+
+  /* 主区占满，题目直接置顶 */
+  .wrap{margin:8px auto 0;grid-template-columns:1fr;padding:0 10px calc(16px + env(safe-area-inset-bottom));gap:10px}
+  .card{overflow:visible}
+  /* 筛选栏压成一行，可横向滑动，避免把题目挤到屏幕中部 */
+  .filters{padding:8px 12px;gap:6px;border-radius:14px 14px 0 0;
+    flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .filters::-webkit-scrollbar{display:none}
+  .filters select{flex:0 0 auto;width:auto;min-width:116px;max-width:172px;order:0;font-size:12.5px;padding:5px 8px}
+  .filters .chip{flex:0 0 auto;padding:5px 11px;font-size:12px;white-space:nowrap}
+  .filters #fReset{margin-left:0 !important}
+  .qwrap{padding:12px 14px 4px}
+  .qmeta{margin-bottom:6px}
+  .stem{font-size:16px}
+  .stem,.kpnote p{word-break:break-word}
+  .kpnote{font-size:12px}
+  .opt{font-size:14px;padding:10px 12px;gap:9px}
+  .qsrc{width:100%;margin-left:0}
+  .qfoot{flex-wrap:wrap;gap:8px;padding:11px 14px calc(11px + env(safe-area-inset-bottom));
+    position:sticky;bottom:0;z-index:20;background:#fff;border-radius:0 0 14px 14px;
+    box-shadow:0 -6px 18px rgba(15,23,42,.08)}
+  /* 提示文字移出吸底条，并收紧按钮，尽量保持单行 */
+  .qfoot .btn{padding:7px 11px;font-size:12.5px}
+  .qfoot .fnote{display:none}
+  .opts.tap::after{content:"点击选项即判分";align-self:flex-start;margin-top:1px;
+    font-size:11.5px;color:#9aa1ab}
+
+  /* 底部抽屉式题目导航 */
+  .aside{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:50;
+    max-height:76vh;display:flex;flex-direction:column;border-bottom:none;
+    border-radius:16px 16px 0 0;padding:8px 14px calc(12px + env(safe-area-inset-bottom));
+    transform:translateY(104%);transition:transform .28s cubic-bezier(.32,.72,0,1);
+    box-shadow:0 -10px 34px rgba(15,23,42,.18);will-change:transform}
+  .aside::before{content:"";display:block;flex:0 0 auto;width:38px;height:4px;border-radius:99px;
+    background:#d7dbe1;margin:2px auto 8px}
+  .aside.open{transform:translateY(0)}
+  .aside h3,.aside .tabs{flex:0 0 auto}
+  .aside .tip{display:none}
+  .sheet{flex:1 1 auto;max-height:none;min-height:110px;overflow:auto;-webkit-overflow-scrolling:touch}
+
+  .scrim{display:block;position:fixed;inset:0;z-index:40;background:rgba(15,23,42,.45);
+    opacity:0;pointer-events:none;transition:opacity .25s}
+  .scrim.on{opacity:1;pointer-events:auto}
+
+  /* “目录”并入吸底操作条，避免与浮动按钮互相遮挡 */
+  .navclose{display:inline-block}
+  .navbtn-m{display:inline-block;font-weight:600}
+  .qfoot .navbtn-m{order:-1}
+}
+@media(max-width:380px){.kpi{font-size:10px}.brand{font-size:14px}}
+
+@media(max-width:380px){.kpi{font-size:10px}.brand{font-size:14px}}
+
 </style>
 </head>
 <body data-page-node-id="HzGFd9QxAFkxELBmXNXCwk">
@@ -156,7 +226,7 @@ kbd{background:#f1f3f5;border:1px solid var(--line);border-bottom-width:2px;bord
   </main>
 
   <aside class="aside" data-page-node-id="KolPNhROWNBqMfWGU2hXB3">
-    <h3 data-page-node-id="p4USdobVJg2QLEvNZiXr3D">题目导航 <span id="navCount" data-page-node-id="w5yk2KgYKLQjMFhCtfP4ps"></span></h3>
+    <h3 data-page-node-id="p4USdobVJg2QLEvNZiXr3D">题目导航 <span id="navCount" data-page-node-id="w5yk2KgYKLQjMFhCtfP4ps"></span><button class="navclose" id="navClose" aria-label="收起题目导航">收起 ▾</button></h3>
     <div class="tabs" data-page-node-id="sjZnEgh2svYeTGzS9nPD4v">
       <button class="on" data-v="list" data-page-node-id="vKU7pMUTbJz92XLS4kvg5N">列表</button>
       <button data-v="grid" data-page-node-id="eeDvbLSr2pi7b7trGwBvCe">总览</button>
@@ -168,6 +238,7 @@ kbd{background:#f1f3f5;border:1px solid var(--line);border-bottom-width:2px;bord
     </div>
   </aside>
 </div>
+<div class="scrim" id="scrim"></div>
 <div class="toast" id="toast" data-page-node-id="nOMlZ9gjXSAwmkzHQRqe8K"></div>
 
 <script>
@@ -274,7 +345,8 @@ function renderQuestion(){
        '<p>'+esc(it.kpsummary)+'</p></details>';
 
   if(q.options){
-    h += '<ul class="opts" id="opts">';
+    const tapHint = !revealed && (q.type==='single' || q.type==='judge');
+    h += '<ul class="opts'+(tapHint?' tap':'')+'" id="opts">';
     q.options.forEach(o=>{
       const k = keyOf(o);
       let cls='opt';
@@ -286,7 +358,11 @@ function renderQuestion(){
         else if(chosen) cls+=' bad';
       }else if(sel.indexOf(k)>-1) cls+=' sel';
       const label = o.replace(/^[A-Za-z]\s*[.、．:：]?\s*/, '') || o;
-      h += '<li class="'+cls+'" data-k="'+esc(k)+'"><span class="k">'+esc(k)+'</span><span>'+esc(label)+'</span></li>';
+      const isJudge = (q.type==='judge');
+      if(isJudge) cls += ' plain';    // 判断题选项本身就是“对/错”，不再重复显示
+      h += '<li class="'+cls+'" data-k="'+esc(k)+'">'+
+           '<span class="k">'+esc(k)+'</span>'+
+           (isJudge? '' : '<span>'+esc(label)+'</span>')+'</li>';
     });
     h += '</ul>';
   } else {
@@ -307,6 +383,7 @@ function renderQuestion(){
 
   /* 底部操作 */
   h += '<div class="qfoot">';
+  h += '<button class="btn navbtn-m" id="btnNav" aria-label="打开题目导航">目录</button>';
   h += '<button class="btn" id="btnPrev"'+(S.idx===0?' disabled':'')+'>← 上一题</button>';
   if(!revealed){
     if(q.type==='multiple') h += '<button class="btn pri" id="btnSubmit">提交作答</button>';
@@ -320,7 +397,7 @@ function renderQuestion(){
     }
   }
   h += '<button class="btn" id="btnNext"'+(S.idx>=view.length-1?' disabled':'')+'>下一题 →</button>';
-  h += '<span class="fnote">'+esc(q.id)+'</span>';
+  h += '<span class="fnote qid">'+esc(q.id)+'</span>';
   h += '</div>';
 
   body.innerHTML = h;
@@ -346,6 +423,7 @@ function bindQuestion(){
   b('btnPrev', ()=>{ shortRevealed=false; S.idx--; save(); renderAll(); });
   b('btnNext', ()=>{ shortRevealed=false; S.idx++; save(); renderAll(); });
   b('btnRedo', ()=>{ delete S.answers[q.id]; save(); renderAll(); toast('已清除本题记录'); });
+  b('btnNav', openSheet);
 }
 
 /* 提交判分 */
@@ -380,6 +458,7 @@ function renderShortJudge(){
   if(!foot) return;
   const q=view[S.idx].q;
   foot.innerHTML =
+    '<button class="btn navbtn-m" id="btnNav" aria-label="打开题目导航">目录</button>'+
     '<button class="btn" id="btnPrev"'+(S.idx===0?' disabled':'')+'>← 上一题</button>'+
     '<span class="fnote">请对照参考答案自评：</span>'+
     '<button class="btn ok" id="jOk">我答对了</button>'+
@@ -390,6 +469,7 @@ function renderShortJudge(){
   document.getElementById('jBad').onclick = ()=>{ setRec(q.id, false, '(自评：答错)'); go(1); };
   document.getElementById('btnPrev').onclick = ()=>go(-1);
   document.getElementById('btnNext').onclick = ()=>go(1);
+  document.getElementById('btnNav').onclick = openSheet;
 }
 
 /* ---------- 侧栏 ---------- */
@@ -406,7 +486,7 @@ function renderSheet(){
     });
     h+='</div><div class="tip">灰色=未作答　绿色=答对　红色=答错　点击色块跳转</div>';
     box.innerHTML=h;
-    box.querySelectorAll('.gcell').forEach(c=>c.onclick=()=>{ S.idx=+c.dataset.i; save(); renderAll(); });
+    box.querySelectorAll('.gcell').forEach(c=>c.onclick=()=>{ S.idx=+c.dataset.i; save(); renderAll(); closeSheet(); });
     return;
   }
 
@@ -430,7 +510,7 @@ function renderSheet(){
        '<div class="x">'+esc(it.kptitle)+'：'+esc(it.q.stem.slice(0,52))+'</div></div>';
   });
   box.innerHTML=h;
-  box.querySelectorAll('.srow').forEach(el=>el.onclick=()=>{ S.idx=+el.dataset.i; save(); renderAll(); });
+  box.querySelectorAll('.srow').forEach(el=>el.onclick=()=>{ S.idx=+el.dataset.i; save(); renderAll(); closeSheet(); });
 }
 
 /* 筛选变化后：重建视图再渲染 */
@@ -438,9 +518,18 @@ function applyFilter(){ buildView(); renderAll(); }
 
 /* ---------- 主渲染 ---------- */
 function renderAll(){
-  renderHeader(); renderQuestion(); renderSheet();
-  const srow=document.querySelector('.srow[data-i="'+S.idx+'"], .gcell[data-i="'+S.idx+'"]');
-  if(srow) srow.scrollIntoView({block:'nearest'});
+  renderHeader(); renderQuestion(); renderSheet(); scrollSheetToCurrent();
+}
+
+/* 让导航里的当前题滚入可视区：只滚动导航面板自身，绝不滚动整个页面
+   （手机端导航面板是 fixed 抽屉，用 scrollIntoView 会把整页顶走） */
+function scrollSheetToCurrent(){
+  const sheet=document.getElementById('sheet');
+  const row=sheet.querySelector('.srow[data-i="'+S.idx+'"]') || sheet.querySelector('.gcell[data-i="'+S.idx+'"]');
+  if(!row) return;
+  const a=row.getBoundingClientRect(), b=sheet.getBoundingClientRect();
+  if(a.top>=b.top-1 && a.bottom<=b.bottom+1) return;   // 已在可视区
+  sheet.scrollTop += (a.top-b.top) - (sheet.clientHeight-a.height)/2;
 }
 
 /* ---------- 筛选交互 ---------- */
@@ -510,6 +599,26 @@ document.addEventListener('keydown', e=>{
     const el=opts[+e.key-1]; if(el) el.click();
   }
 });
+
+/* ---------- 手机端：底部抽屉式题目导航 ---------- */
+const asideEl = document.querySelector('.aside');
+const scrimEl = document.getElementById('scrim');
+const isMobile = ()=>window.matchMedia('(max-width:900px)').matches;
+function openSheet(){
+  if(!isMobile()) return;
+  document.body.classList.add('sheet-open');
+  asideEl.classList.add('open'); scrimEl.classList.add('on');
+}
+function closeSheet(){
+  document.body.classList.remove('sheet-open');
+  asideEl.classList.remove('open'); scrimEl.classList.remove('on');
+}
+scrimEl.onclick = closeSheet;
+const navCloseEl = document.getElementById("navClose");
+if(navCloseEl) navCloseEl.onclick = (e)=>{ e.stopPropagation(); closeSheet(); };
+window.addEventListener('resize', ()=>{ if(!isMobile()) closeSheet(); });
+window.addEventListener('orientationchange', ()=>{ if(!isMobile()) closeSheet(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeSheet(); });
 
 /* ---------- 启动 ---------- */
 document.getElementById('srcLine').textContent = DATA.stats.modules+' 模块 / '+
